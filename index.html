@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart IoT Plant Watering System — Feedback</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --moss:   #1e3a1e;
+  --leaf:   #2d6a2d;
+  --sage:   #5a9e4a;
+  --mint:   #8dc87a;
+  --mist:   #e6f0e2;
+  --cream:  #f7f4ee;
+  --soil:   #2c1f0e;
+  --amber:  #d4700a;
+  --gold:   #e8b84b;
+  --white:  #ffffff;
+  --grey:   #6b7a65;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Lora', Georgia, serif;
+  background: var(--cream);
+  color: var(--soil);
+  overflow-x: hidden;
+}
+
+/* ── HERO ─────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  background: var(--moss);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 800px 600px at 20% 30%, rgba(45,106,45,0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 600px 700px at 80% 70%, rgba(30,58,30,0.5) 0%, transparent 70%);
+}
+
+.leaf-deco {
+  position: absolute;
+  font-size: 220px;
+  opacity: 0.04;
+  pointer-events: none;
+  line-height: 1;
+}
+.leaf-deco.tl { top: -40px; left: -40px; transform: rotate(-20deg); }
+.leaf-deco.br { bottom: -40px; right: -40px; transform: rotate(30deg); }
+
+.hero-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(141,200,122,0.15);
+  border: 1px solid rgba(141,200,122,0.3);
+  color: var(--mint);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  border-radius: 100px;
+  margin-bottom: 28px;
+  animation: fadeDown 0.8s ease both;
+}
+
+.hero h1 {
+  position: relative;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 7vw, 80px);
+  line-height: 1.05;
+  color: var(--white);
+  margin-bottom: 20px;
+  animation: fadeDown 0.9s ease 0.1s both;
+}
+.hero h1 em {
+  color: var(--mint);
+  font-style: italic;
+}
+
+.hero-sub {
+  position: relative;
+  font-size: clamp(14px, 2vw, 17px);
+  color: rgba(255,255,255,0.6);
+  max-width: 520px;
+  line-height: 1.75;
+  margin-bottom: 48px;
+  animation: fadeDown 0.9s ease 0.2s both;
+}
+
+.hero-chips {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 48px;
+  animation: fadeDown 0.9s ease 0.3s both;
+}
+.chip {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.75);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 100px;
+}
+
+.hero-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--sage);
+  color: white;
+  font-family: 'Lora', serif;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 16px 36px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.25s;
+  box-shadow: 0 8px 32px rgba(45,106,45,0.5);
+  animation: fadeDown 0.9s ease 0.4s both;
+}
+.hero-cta:hover {
+  background: var(--leaf);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 40px rgba(45,106,45,0.55);
+}
+.hero-scroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.35);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  animation: bounce 2s infinite 1.5s;
+}
+.scroll-arrow { font-size: 20px; }
+
+/* ── SECTION WRAPPER ─────────────────────── */
+.section {
+  padding: 96px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-tag {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sage);
+  background: rgba(90,158,74,0.1);
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.15;
+  color: var(--moss);
+  margin-bottom: 12px;
+}
+.section-title em { color: var(--sage); font-style: italic; }
+
+.section-lead {
+  font-size: 16px;
+  color: var(--grey);
+  line-height: 1.75;
+  max-width: 620px;
+  margin-bottom: 56px;
+}
+
+/* ── PROBLEM STRIP ───────────────────────── */
+.problem-strip {
+  background: var(--moss);
+  padding: 80px 24px;
+}
+.problem-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.problem-strip .section-tag { color: var(--mint); background: rgba(141,200,122,0.1); }
+.problem-strip .section-title { color: var(--white); }
+.problem-strip .section-lead { color: rgba(255,255,255,0.55); }
+
+.problem-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.problem-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 28px;
+  transition: transform 0.2s, background 0.2s;
+}
+.problem-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.08); }
+.problem-card .icon { font-size: 36px; margin-bottom: 14px; }
+.problem-card h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--mint); margin-bottom: 8px; }
+.problem-card p { font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.7; }
+
+/* ── STORYBOARD ──────────────────────────── */
+.storyboard-wrap { background: var(--white); padding: 96px 24px; }
+.storyboard-inner { max-width: 1100px; margin: 0 auto; }
+
+.storyboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.story-step {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0;
+  position: relative;
+}
+
+/* Connector line */
+.story-step::before {
+  content: '';
+  position: absolute;
+  left: 39px;
+  top: 80px;
+  bottom: -1px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--sage), var(--mist));
+}
+.story-step:nth-child(odd):last-child::before,
+.story-step:nth-child(even):last-child::before,
+.story-step:last-child::before { display: none; }
+
+.step-num-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 8px;
+}
+.step-num {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--moss);
+  color: white;
+  font-family: 'DM Mono', monospace;
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 4px 16px rgba(30,58,30,0.25);
+}
+
+.step-content {
+  padding: 8px 24px 48px 16px;
+}
+.step-visual {
+  background: var(--mist);
+  border-radius: 14px;
+  height: 160px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  position: relative;
+  overflow: hidden;
+}
+.step-visual .vis-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  font-size: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.step-visual .vis-main { position: relative; z-index: 1; }
+
+/* Custom storyboard visuals */
+.sv-sensor {
+  background: linear-gradient(135deg, #e8f5e1 0%, #c5e8b0 100%);
+}
+.sv-esp {
+  background: linear-gradient(135deg, #e1eef5 0%, #b0d4e8 100%);
+}
+.sv-blynk {
+  background: linear-gradient(135deg, #f5e8e1 0%, #e8c4a0 100%);
+}
+.sv-relay {
+  background: linear-gradient(135deg, #f5f1e1 0%, #e8dca0 100%);
+}
+.sv-auto {
+  background: linear-gradient(135deg, #e1f5e8 0%, #a0e8bc 100%);
+}
+.sv-result {
+  background: linear-gradient(135deg, #f0f5e1 0%, #d4e8a0 100%);
+}
+
+.step-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 6px;
+}
+.step-content h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: var(--moss);
+  margin-bottom: 8px;
+}
+.step-content p { font-size: 14px; color: var(--grey); line-height: 1.7; }
+.step-spec {
+  display: inline-block;
+  margin-top: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  background: var(--mist);
+  color: var(--leaf);
+  padding: 3px 10px;
+  border-radius: 100px;
+  border: 1px solid rgba(90,158,74,0.2);
+}
+
+/* ── FEATURES ────────────────────────────── */
+.features-section { background: var(--cream); }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+.feature-card {
+  background: var(--white);
+  border-radius: 18px;
+  padding: 28px;
+  border: 1px solid rgba(90,158,74,0.12);
+  box-shadow: 0 2px 16px rgba(30,58,30,0.05);
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--sage), var(--mint));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.feature-card:hover { transform: translateY(-4px); box-shadow: 0 10px 32px rgba(30,58,30,0.1); }
+.feature-card:hover::after { transform: scaleX(1); }
+.feature-icon { font-size: 32px; margin-bottom: 14px; }
+.feature-card h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--moss); margin-bottom: 8px; }
+.feature-card p { font-size: 13px; color: var(--grey); line-height: 1.65; }
+
+/* Tech specs row */
+.specs-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 40px;
+  padding: 28px;
+  background: var(--moss);
+  border-radius: 20px;
+}
+.spec-item { text-align: center; }
+.spec-val { font-family: 'DM Mono', monospace; font-size: 22px; color: var(--mint); font-weight: 500; }
+.spec-lbl { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 4px; }
+
+/* ── DIVIDER ─────────────────────────────── */
+.divider-section {
+  background: var(--leaf);
+  padding: 64px 24px;
+  text-align: center;
+}
+.divider-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(26px, 4vw, 40px);
+  color: var(--white);
+  margin-bottom: 12px;
+}
+.divider-section p { color: rgba(255,255,255,0.65); font-size: 15px; }
+
+/* ── FEEDBACK FORM ───────────────────────── */
+.form-section {
+  background: var(--cream);
+  padding: 96px 24px;
+}
+.form-section .section { padding: 0; max-width: 760px; }
+
+.progress-wrap {
+  background: rgba(90,158,74,0.15);
+  border-radius: 100px;
+  height: 5px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--sage), var(--mint));
+  border-radius: 100px;
+  transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  width: 0%;
+}
+.progress-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--sage);
+  text-align: right;
+  margin-bottom: 36px;
+}
+
+.form-block {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 36px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(90,158,74,0.1);
+  box-shadow: 0 2px 20px rgba(30,58,30,0.05);
+}
+
+.block-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(90,158,74,0.1);
+}
+.block-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: var(--mist);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.block-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--moss); }
+.block-sub { font-size: 13px; color: var(--grey); margin-top: 3px; }
+
+.field { margin-bottom: 26px; }
+.field:last-child { margin-bottom: 0; }
+
+label.flabel {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--soil);
+  margin-bottom: 10px;
+}
+label.flabel .req { color: var(--sage); }
+label.flabel .hint { font-weight: 400; font-size: 12px; color: #8a9e87; display: block; margin-top: 2px; }
+
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1.5px solid rgba(90,158,74,0.2);
+  border-radius: 12px;
+  font-family: 'Lora', serif;
+  font-size: 14px;
+  color: var(--soil);
+  background: var(--cream);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  -webkit-appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--sage);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(90,158,74,0.1);
+}
+textarea { resize: vertical; min-height: 110px; line-height: 1.7; }
+select { cursor: pointer; }
+
+/* Star rating */
+.star-row { display: flex; align-items: center; gap: 4px; }
+.star-row input { display: none; }
+.star-row label {
+  font-size: 32px;
+  cursor: pointer;
+  color: #d8e5d4;
+  transition: color 0.15s, transform 0.15s;
+  line-height: 1;
+  margin: 0;
+  font-weight: 400;
+}
+.star-row label:hover,
+.star-row label.lit { color: var(--gold); transform: scale(1.15); }
+.star-txt {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--sage);
+  margin-left: 12px;
+  min-width: 80px;
+}
+
+/* Scale 1-10 */
+.scale-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.scale-row input { display: none; }
+.scale-row label {
+  width: 46px; height: 46px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(90,158,74,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; font-size: 14px;
+  cursor: pointer; transition: all 0.15s;
+  color: var(--grey); background: var(--cream);
+  margin: 0;
+}
+.scale-row input:checked + label {
+  background: var(--moss); border-color: var(--moss);
+  color: white; transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30,58,30,0.3);
+}
+.scale-row label:hover { border-color: var(--sage); color: var(--moss); }
+.scale-ends { display: flex; justify-content: space-between; font-size: 11px; color: #9aaa97; margin-top: 5px; font-family: 'DM Mono', monospace; }
+
+/* Check / Radio items */
+.choice-grid { display: flex; flex-direction: column; gap: 10px; }
+.choice-grid.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.choice-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 13px 16px;
+  border: 1.5px solid rgba(90,158,74,0.15);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--cream);
+  user-select: none;
+}
+.choice-item:hover { border-color: var(--sage); background: rgba(90,158,74,0.05); }
+.choice-item.sel { border-color: var(--leaf); background: rgba(90,158,74,0.08); }
+.choice-item input { display: none; }
+
+.cb-box {
+  width: 20px; height: 20px; flex-shrink: 0; margin-top: 1px;
+  border-radius: 5px; border: 2px solid rgba(90,158,74,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: transparent; transition: all 0.15s;
+}
+.rb-dot {
+  width: 20px; height: 20px; flex-shrink: 0; margin-top: 1px;
+  border-radius: 50%; border: 2px solid rgba(90,158,74,0.3);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.rb-dot::after {
+  content: ''; width: 8px; height: 8px; border-radius: 50%;
+  background: transparent; transition: background 0.15s;
+}
+.choice-item.sel .cb-box { background: var(--leaf); border-color: var(--leaf); color: white; }
+.choice-item.sel .rb-dot { border-color: var(--leaf); }
+.choice-item.sel .rb-dot::after { background: var(--leaf); }
+.choice-item label { font-size: 14px; color: var(--soil); cursor: pointer; margin: 0; font-weight: 400; line-height: 1.5; }
+
+/* Likert table */
+.likert { width: 100%; border-collapse: collapse; }
+.likert th {
+  font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+  color: var(--sage); text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 8px 10px; text-align: center; border-bottom: 1px solid rgba(90,158,74,0.12);
+}
+.likert th:first-child { text-align: left; }
+.likert td { padding: 14px 10px; text-align: center; border-bottom: 1px solid rgba(90,158,74,0.06); }
+.likert td:first-child { text-align: left; font-size: 13px; color: var(--soil); font-weight: 600; padding-right: 16px; }
+.likert tr:last-child td { border-bottom: none; }
+.likert tr:hover td { background: rgba(90,158,74,0.03); }
+.lk-radio {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid rgba(90,158,74,0.25); appearance: none;
+  cursor: pointer; transition: all 0.15s; display: inline-block; vertical-align: middle;
+}
+.lk-radio:hover { border-color: var(--sage); }
+.lk-radio:checked { background: var(--leaf); border-color: var(--leaf); box-shadow: 0 2px 8px rgba(90,158,74,0.4); }
+
+/* Submit */
+.submit-block {
+  text-align: center;
+  padding: 56px 36px;
+}
+.btn-submit {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--moss); color: white; border: none;
+  border-radius: 50px; padding: 18px 48px;
+  font-family: 'Lora', serif; font-size: 17px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+  box-shadow: 0 8px 28px rgba(30,58,30,0.35);
+  letter-spacing: 0.01em;
+}
+.btn-submit:hover { background: var(--leaf); transform: translateY(-2px); box-shadow: 0 14px 40px rgba(30,58,30,0.4); }
+.submit-note { font-family: 'DM Mono', monospace; font-size: 11px; color: #9aaa97; margin-top: 14px; }
+
+/* Error */
+.err-msg { font-family: 'DM Mono', monospace; font-size: 11px; color: #c0392b; margin-top: 5px; display: none; }
+.has-err input, .has-err textarea, .has-err select { border-color: #c0392b; }
+
+/* Success */
+.success-wrap { display: none; text-align: center; padding: 80px 40px; background: white; border-radius: 20px; border: 1px solid rgba(90,158,74,0.12); }
+.success-icon { width: 88px; height: 88px; border-radius: 50%; background: linear-gradient(135deg, var(--leaf), var(--mint)); display: flex; align-items: center; justify-content: center; font-size: 40px; margin: 0 auto 24px; box-shadow: 0 8px 32px rgba(90,158,74,0.35); }
+.success-wrap h2 { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--moss); margin-bottom: 12px; }
+.success-wrap p { color: var(--grey); font-size: 15px; max-width: 420px; margin: 0 auto; line-height: 1.7; }
+
+/* ── ANIMATIONS ──────────────────────────── */
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-8px); } }
+
+/* Scroll reveal */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+@media (max-width: 700px) {
+  .storyboard-grid { grid-template-columns: 1fr; }
+  .choice-grid.two-col { grid-template-columns: 1fr; }
+  .scale-row label { width: 38px; height: 38px; font-size: 13px; }
+  .form-block { padding: 24px 18px; }
+  .likert th:nth-child(3),
+  .likert td:nth-child(3) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="leaf-deco tl">🌿</div>
+  <div class="leaf-deco br">🌱</div>
+
+  <div class="hero-badge">🌿 Army Institute of Technology · E&TC-B</div>
+
+  <h1>Smart IoT<br><em>Plant Watering</em><br>System</h1>
+
+  <p class="hero-sub">An automated, WiFi-connected plant care system built with ESP32 & Blynk. Before sharing your feedback, explore how it works below.</p>
+
+  <div class="hero-chips">
+    <span class="chip">ESP32 Microcontroller</span>
+    <span class="chip">Capacitive Moisture Sensor</span>
+    <span class="chip">Blynk IoT Platform</span>
+    <span class="chip">5V Relay + 12V Pump</span>
+    <span class="chip">Dual-Mode Control</span>
+  </div>
+
+  <a href="#storyboard" class="hero-cta">See How It Works ↓</a>
+
+  <div class="hero-scroll">
+    <span>SCROLL</span>
+    <span class="scroll-arrow">↓</span>
+  </div>
+</section>
+
+<!-- ═══ PROBLEM ═════════════════════════════════════════════ -->
+<section class="problem-strip">
+  <div class="problem-inner">
+    <div class="section-tag">The Problem</div>
+    <h2 class="section-title" style="color:white">Why Does Plant Care Fail?</h2>
+    <p class="section-lead">Urban gardeners face persistent challenges maintaining healthy plants — especially when away from home.</p>
+
+    <div class="problem-cards reveal">
+      <div class="problem-card">
+        <div class="icon">🏜️</div>
+        <h3>Under-watering</h3>
+        <p>Plants dry out completely during extended absences, leading to irreversible damage and poor growth.</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">🌊</div>
+        <h3>Over-watering</h3>
+        <p>Excessive moisture causes root rot, fungal infections, and nutrient leaching from the soil.</p>
+      </div>
+      <div class="problem-card">
+        <div class="icon">📵</div>
+        <h3>Zero Visibility</h3>
+        <p>No way to monitor plant health remotely, creating anxiety when away from home for days.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STORYBOARD ══════════════════════════════════════════ -->
+<div id="storyboard" class="storyboard-wrap">
+  <div class="storyboard-inner">
+    <div class="section-tag">Visual Storyboard</div>
+    <h2 class="section-title">How The System <em>Works</em></h2>
+    <p class="section-lead">Follow the journey from dry soil to a perfectly watered plant — fully automated, remotely monitored.</p>
+
+    <div class="storyboard-grid">
+
+      <!-- Step 1 -->
+      <div class="story-step reveal">
+        <div class="step-num-col"><div class="step-num">1</div></div>
+        <div class="step-content">
+          <div class="step-visual sv-sensor">
+            <div class="vis-bg">💧</div>
+            <div class="vis-main">🌱</div>
+          </div>
+          <div class="step-tag">Sensing</div>
+          <h3>Soil Moisture Detected</h3>
+          <p>A capacitive soil moisture sensor is inserted into the pot. It measures moisture by detecting changes in electrical capacitance — no metal corrosion, long lifespan.</p>
+          <span class="step-spec">GPIO Pin 34 · ADC1_CH6</span>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="story-step reveal">
+        <div class="step-num-col"><div class="step-num">2</div></div>
+        <div class="step-content">
+          <div class="step-visual sv-esp">
+            <div class="vis-bg">📡</div>
+            <div class="vis-main">🖥️</div>
+          </div>
+          <div class="step-tag">Processing</div>
+          <h3>ESP32 Reads & Converts Data</h3>
+          <p>The ESP32 reads 12-bit ADC values (0–4095) and converts them to a moisture percentage using a calibrated linear mapping function.</p>
+          <span class="step-spec">map(val, 1407, 4095, 100, 0)</span>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="story-step reveal">
+        <div class="step-num-col"><div class="step-num">3</div></div>
+        <div class="step-content">
+          <div class="step-visual sv-blynk">
+            <div class="vis-bg">📲</div>
+            <div class="vis-main">📊</div>
+          </div>
+          <div class="step-tag">Cloud &amp; App</div>
+          <h3>Live Data Sent to Blynk App</h3>
+          <p>Moisture data streams to the Blynk cloud platform via WiFi. A real-time gauge widget displays current moisture with colour-coded alerts — Red &lt;30%, Yellow 30–60%, Green &gt;60%.</p>
+          <span class="step-spec">2.4GHz WiFi · &lt;1sec latency</span>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="story-step reveal">
+        <div class="step-num-col"><div class="step-num">4</div></div>
+        <div class="step-content">
+          <div class="step-visual sv-relay">
+            <div class="vis-bg">⚡</div>
+            <div class="vis-main">🔌</div>
+          </div>
+          <div class="step-tag">Decision Logic</div>
+          <h3>Threshold Check: Below 30%?</h3>
+          <p>If moisture drops below 30%, the system automatically triggers the relay module on GPIO Pin 25, which switches the pump ON. Electrical isolation protects the ESP32 from the high-current pump circuit.</p>
+          <span class="step-spec">5V Relay · 10A max load · flyback diode</span>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="story-step reveal">
+        <div class="step-num-col"><div class="step-num">5</div></div>
+        <div class="step-content">
+          <div class="step-visual sv-auto">
+            <div class="vis-bg">💦</div>
+            <div class="vis-main">🚰</div>
+          </div>
+          <div class="step-tag">Actuation</div>
+          <h3>Pump Waters the Plant</h3>
+          <p>A 12V DC submersible pump delivers 2–5 litres per minute of water. Watering continues until moisture exceeds the threshold, then the relay cuts power to the pump automatically.</p>
+          <span class="step-spec">12V DC · 2–5 L/min flow rate</span>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="story-step reveal">
+        <div class="step-num-col"><div class="step-num">6</div></div>
+        <div class="step-content">
+          <div class="step-visual sv-result">
+            <div class="vis-bg">🌿</div>
+            <div class="vis-main">✅</div>
+          </div>
+          <div class="step-tag">Manual Override</div>
+          <h3>Remote Control Anytime</h3>
+          <p>A push-button in the Blynk app lets you manually trigger the pump from anywhere in the world — ideal for fertiliser application or overriding the automation when needed.</p>
+          <span class="step-spec">Cloud control · unlimited range</span>
+        </div>
+      </div>
+
+    </div><!-- /storyboard-grid -->
+  </div>
+</div>
+
+<!-- ═══ FEATURES ════════════════════════════════════════════ -->
+<section class="section features-section">
+  <div class="section-tag">Key Features</div>
+  <h2 class="section-title">What Makes It <em>Smart</em></h2>
+  <p class="section-lead">The system combines precision hardware with intuitive IoT connectivity for a truly hands-free experience.</p>
+
+  <div class="features-grid reveal">
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <h3>Autonomous Mode</h3>
+      <p>Threshold-based (30%) automatic watering — no human input required. The system monitors 24/7 and reacts in real time.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📱</div>
+      <h3>Manual Override</h3>
+      <p>One-tap pump control from the Blynk app anywhere in the world via cloud connectivity — unlimited range.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📈</div>
+      <h3>Real-time Monitoring</h3>
+      <p>Live moisture gauge with colour-coded indicators streamed to your phone with under 1 second response latency.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🛡️</div>
+      <h3>Corrosion-resistant Sensor</h3>
+      <p>Capacitive sensor technology — no metal probes, no corrosion, far superior lifespan vs. resistive sensors.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💧</div>
+      <h3>Water Efficiency</h3>
+      <p>Reduced water usage by 35% compared to traditional scheduled watering methods in 30-day testing.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔧</div>
+      <h3>Modular Architecture</h3>
+      <p>Designed to scale — multi-zone expansion, solar power, and Weather API integration are future-ready.</p>
+    </div>
+  </div>
+
+  <div class="specs-row reveal">
+    <div class="spec-item">
+      <div class="spec-val">30%</div>
+      <div class="spec-lbl">Auto-water threshold</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-val">12-bit</div>
+      <div class="spec-lbl">ADC resolution</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-val">&lt;1 sec</div>
+      <div class="spec-lbl">App response latency</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-val">35%</div>
+      <div class="spec-lbl">Water savings vs. manual</div>
+    </div>
+    <div class="spec-item">
+      <div class="spec-val">30 days</div>
+      <div class="spec-lbl">Testing period</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DIVIDER ══════════════════════════════════════════════ -->
+<div class="divider-section">
+  <h2>Now That You Know How It Works —</h2>
+  <p>Share your honest feedback below. Your insights help the team at AIT improve the next iteration.</p>
+</div>
+
+<!-- ═══ FEEDBACK FORM ════════════════════════════════════════ -->
+<section class="form-section" id="feedback">
+  <div class="section" style="max-width:760px;padding:0;margin:0 auto;">
+
+    <div class="section-tag">Your Feedback</div>
+    <h2 class="section-title" style="margin-bottom:8px">Tell Us What You <em>Think</em></h2>
+    <p class="section-lead" style="margin-bottom:32px">All responses are anonymous unless you choose to share your name. Takes ~4 minutes.</p>
+
+    <div class="progress-wrap"><div class="progress-fill" id="pFill"></div></div>
+    <div class="progress-label" id="pLabel">0 of 5 required fields complete</div>
+
+    <form id="feedbackForm" novalidate>
+
+      <!-- Block 1: About You -->
+      <div class="form-block reveal">
+        <div class="block-header">
+          <div class="block-icon">👤</div>
+          <div><div class="block-title">About You</div><div class="block-sub">Quick context so we understand your perspective</div></div>
+        </div>
+
+        <div class="field">
+          <label class="flabel">Your Name <span class="req">*</span></label>
+          <input type="text" id="inp-name" placeholder="e.g. Prof. Sharma or Roll No." />
+          <div class="err-msg" id="err-name">Please enter your name.</div>
+        </div>
+
+        <div class="field">
+          <label class="flabel">Your Role <span class="req">*</span></label>
+          <div class="choice-grid" id="roleGroup">
+            <div class="choice-item" onclick="pickRadio(this,'role','Faculty / Evaluator')"><input type="radio" name="role" value="Faculty / Evaluator"><div class="rb-dot"></div><label>Faculty / Evaluator</label></div>
+            <div class="choice-item" onclick="pickRadio(this,'role','Fellow Student')"><input type="radio" name="role" value="Fellow Student"><div class="rb-dot"></div><label>Fellow Student</label></div>
+            <div class="choice-item" onclick="pickRadio(this,'role','Industry / External Reviewer')"><input type="radio" name="role" value="Industry / External Reviewer"><div class="rb-dot"></div><label>Industry / External Reviewer</label></div>
+            <div class="choice-item" onclick="pickRadio(this,'role','Other')"><input type="radio" name="role" value="Other"><div class="rb-dot"></div><label>Other</label></div>
+          </div>
+          <div class="err-msg" id="err-role">Please select your role.</div>
+        </div>
+
+        <div class="field">
+          <label class="flabel">Familiarity with IoT / Embedded Systems</label>
+          <select>
+            <option value="">— Select level —</option>
+            <option>Complete Beginner</option>
+            <option>Basic Understanding</option>
+            <option>Intermediate</option>
+            <option>Advanced / Professional</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Block 2: Overall Impression -->
+      <div class="form-block reveal">
+        <div class="block-header">
+          <div class="block-icon">⭐</div>
+          <div><div class="block-title">Overall Impression</div><div class="block-sub">Your general reaction to the product</div></div>
+        </div>
+
+        <div class="field" id="f-stars">
+          <label class="flabel">Overall Rating <span class="req">*</span></label>
+          <div style="display:flex;align-items:center;gap:0;">
+            <div class="star-row" id="starRow">
+              <input type="radio" name="stars" id="st1" value="1"><label for="st1">★</label>
+              <input type="radio" name="stars" id="st2" value="2"><label for="st2">★</label>
+              <input type="radio" name="stars" id="st3" value="3"><label for="st3">★</label>
+              <input type="radio" name="stars" id="st4" value="4"><label for="st4">★</label>
+              <input type="radio" name="stars" id="st5" value="5"><label for="st5">★</label>
+              <span class="star-txt" id="starTxt">Tap to rate</span>
+            </div>
+          </div>
+          <div class="err-msg" id="err-stars">Please give a star rating.</div>
+        </div>
+
+        <div class="field">
+          <label class="flabel">How innovative is the concept?</label>
+          <div class="scale-row" id="innovScale">
+            <input type="radio" name="innov" id="in1" value="1"><label for="in1">1</label>
+            <input type="radio" name="innov" id="in2" value="2"><label for="in2">2</label>
+            <input type="radio" name="innov" id="in3" value="3"><label for="in3">3</label>
+            <input type="radio" name="innov" id="in4" value="4"><label for="in4">4</label>
+            <input type="radio" name="innov" id="in5" value="5"><label for="in5">5</label>
+            <input type="radio" name="innov" id="in6" value="6"><label for="in6">6</label>
+            <input type="radio" name="innov" id="in7" value="7"><label for="in7">7</label>
+            <input type="radio" name="innov" id="in8" value="8"><label for="in8">8</label>
+            <input type="radio" name="innov" id="in9" value="9"><label for="in9">9</label>
+            <input type="radio" name="innov" id="in10" value="10"><label for="in10">10</label>
+          </div>
+          <div class="scale-ends"><span>Not innovative</span><span>Highly innovative</span></div>
+        </div>
+
+        <div class="field">
+          <label class="flabel">First impression after seeing the storyboard above</label>
+          <div class="choice-grid" id="impGroup">
+            <div class="choice-item" onclick="pickRadio(this,'impression','Impressive — clearly well thought out')"><input type="radio" name="impression" value="Impressive — clearly well thought out"><div class="rb-dot"></div><label>Impressive — clearly well thought out</label></div>
+            <div class="choice-item" onclick="pickRadio(this,'impression','Good — solid with some gaps')"><input type="radio" name="impression" value="Good — solid with some gaps"><div class="rb-dot"></div><label>Good — solid with some gaps</label></div>
+            <div class="choice-item" onclick="pickRadio(this,'impression','Average — meets requirements but not outstanding')"><input type="radio" name="impression" value="Average — meets requirements but not outstanding"><div class="rb-dot"></div><label>Average — meets requirements but not outstanding</label></div>
+            <div class="choice-item" onclick="pickRadio(this,'impression','Needs significant improvement')"><input type="radio" name="impression" value="Needs significant improvement"><div class="rb-dot"></div><label>Needs significant improvement</label></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 3: Strengths -->
+      <div class="form-block reveal">
+        <div class="block-header">
+          <div class="block-icon">💪</div>
+          <div><div class="block-title">Product Strengths</div><div class="block-sub">What the system does well</div></div>
+        </div>
+
+        <div class="field">
+          <label class="flabel">Which features do you find most valuable? <span class="req">*</span>
+            <span class="hint">Select all that apply</span>
+          </label>
+          <div class="choice-grid two-col" id="strengthGroup">
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="strength" value="Autonomous watering — no human input needed"><div class="cb-box">✓</div><label>Autonomous watering — no human input</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="strength" value="Remote control via Blynk app"><div class="cb-box">✓</div><label>Remote control via Blynk app</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="strength" value="Real-time moisture monitoring"><div class="cb-box">✓</div><label>Real-time moisture monitoring</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="strength" value="35% water savings vs. manual watering"><div class="cb-box">✓</div><label>35% water savings vs. manual</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="strength" value="Capacitive sensor — no corrosion"><div class="cb-box">✓</div><label>Corrosion-resistant capacitive sensor</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="strength" value="Dual-mode: auto + manual override"><div class="cb-box">✓</div><label>Dual-mode: auto + manual override</label></div>
+          </div>
+          <div class="err-msg" id="err-strengths">Please select at least one strength.</div>
+        </div>
+
+        <div class="field">
+          <label class="flabel">What is the single most impressive thing about this product?</label>
+          <textarea placeholder="e.g. The dual-mode architecture is elegant — it gives both automation and manual control without one blocking the other."></textarea>
+        </div>
+
+        <div class="field">
+          <label class="flabel">Rate the hardware component choices</label>
+          <table class="likert">
+            <thead><tr>
+              <th></th><th>Poor</th><th>Fair</th><th>Good</th><th>V.Good</th><th>Excellent</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>ESP32 microcontroller choice</td><td><input class="lk-radio" type="radio" name="hw-esp" value="1"></td><td><input class="lk-radio" type="radio" name="hw-esp" value="2"></td><td><input class="lk-radio" type="radio" name="hw-esp" value="3"></td><td><input class="lk-radio" type="radio" name="hw-esp" value="4"></td><td><input class="lk-radio" type="radio" name="hw-esp" value="5"></td></tr>
+              <tr><td>Capacitive moisture sensor</td><td><input class="lk-radio" type="radio" name="hw-sensor" value="1"></td><td><input class="lk-radio" type="radio" name="hw-sensor" value="2"></td><td><input class="lk-radio" type="radio" name="hw-sensor" value="3"></td><td><input class="lk-radio" type="radio" name="hw-sensor" value="4"></td><td><input class="lk-radio" type="radio" name="hw-sensor" value="5"></td></tr>
+              <tr><td>Relay + pump combination</td><td><input class="lk-radio" type="radio" name="hw-relay" value="1"></td><td><input class="lk-radio" type="radio" name="hw-relay" value="2"></td><td><input class="lk-radio" type="radio" name="hw-relay" value="3"></td><td><input class="lk-radio" type="radio" name="hw-relay" value="4"></td><td><input class="lk-radio" type="radio" name="hw-relay" value="5"></td></tr>
+              <tr><td>Blynk as IoT platform</td><td><input class="lk-radio" type="radio" name="hw-blynk" value="1"></td><td><input class="lk-radio" type="radio" name="hw-blynk" value="2"></td><td><input class="lk-radio" type="radio" name="hw-blynk" value="3"></td><td><input class="lk-radio" type="radio" name="hw-blynk" value="4"></td><td><input class="lk-radio" type="radio" name="hw-blynk" value="5"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Block 4: Weaknesses -->
+      <div class="form-block reveal">
+        <div class="block-header">
+          <div class="block-icon">🔍</div>
+          <div><div class="block-title">Weaknesses & Gaps</div><div class="block-sub">Help us identify what needs to be improved</div></div>
+        </div>
+
+        <div class="field" id="f-weakness">
+          <label class="flabel">What is the single biggest shortcoming? <span class="req">*</span></label>
+          <textarea id="inp-weakness" placeholder="e.g. The system is entirely WiFi-dependent — if the router goes down, both monitoring and manual control fail. A local fallback mode (direct AP or SD card logging) would make it much more robust." style="min-height:120px;"></textarea>
+          <div class="err-msg" id="err-weakness">Please describe the main shortcoming.</div>
+        </div>
+
+        <div class="field">
+          <label class="flabel">Which technical areas need improvement?
+            <span class="hint">Select all that apply</span>
+          </label>
+          <div class="choice-grid two-col">
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="weakarea" value="WiFi reliability / offline fallback"><div class="cb-box">✓</div><label>WiFi reliability / offline fallback</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="weakarea" value="Data logging and history"><div class="cb-box">✓</div><label>Data logging and history</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="weakarea" value="Power management / battery life"><div class="cb-box">✓</div><label>Power management / battery life</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="weakarea" value="Sensor accuracy / calibration"><div class="cb-box">✓</div><label>Sensor accuracy / calibration</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="weakarea" value="Water overflow / flood protection"><div class="cb-box">✓</div><label>Water overflow protection</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="weakarea" value="Security / authentication"><div class="cb-box">✓</div><label>Security / authentication</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="weakarea" value="Pump run-dry protection"><div class="cb-box">✓</div><label>Pump run-dry protection</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="weakarea" value="No major issues found"><div class="cb-box">✓</div><label>No major issues found</label></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="flabel">Were there any safety concerns you noticed?</label>
+          <div class="choice-grid">
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="safety" value="Water near electrical components"><div class="cb-box">✓</div><label>Water and electrical components too close together</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="safety" value="No overflow/flood detection"><div class="cb-box">✓</div><label>No overflow or flood detection mechanism</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="safety" value="Pump can run dry"><div class="cb-box">✓</div><label>Pump can run dry if reservoir is empty</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="safety" value="No safety concerns"><div class="cb-box">✓</div><label>No safety concerns noted</label></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 5: Future & Recommendation -->
+      <div class="form-block reveal">
+        <div class="block-header">
+          <div class="block-icon">🚀</div>
+          <div><div class="block-title">Future & Recommendation</div><div class="block-sub">Where should the project go next?</div></div>
+        </div>
+
+        <div class="field" id="f-recommend">
+          <label class="flabel">Would you recommend this for a higher-level competition or publication? <span class="req">*</span></label>
+          <div class="choice-grid" id="recGroup">
+            <div class="choice-item" onclick="pickRadio(this,'recommend','Definitely yes — with minor polishing')"><input type="radio" name="recommend" value="Definitely yes — with minor polishing"><div class="rb-dot"></div><label>Definitely yes — just needs minor polishing</label></div>
+            <div class="choice-item" onclick="pickRadio(this,'recommend','Yes — after significant improvements')"><input type="radio" name="recommend" value="Yes — after significant improvements"><div class="rb-dot"></div><label>Yes — but after significant improvements</label></div>
+            <div class="choice-item" onclick="pickRadio(this,'recommend','Needs complete rethinking')"><input type="radio" name="recommend" value="Needs complete rethinking"><div class="rb-dot"></div><label>The core concept needs rethinking first</label></div>
+            <div class="choice-item" onclick="pickRadio(this,'recommend','Not ready')"><input type="radio" name="recommend" value="Not ready"><div class="rb-dot"></div><label>No — not ready for publication</label></div>
+          </div>
+          <div class="err-msg" id="err-recommend">Please select an option.</div>
+        </div>
+
+        <div class="field">
+          <label class="flabel">Which future features are most important to add?
+            <span class="hint">Select all that apply</span>
+          </label>
+          <div class="choice-grid">
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="future" value="Weather API — skip watering before rain"><div class="cb-box">✓</div><label>🌧️ Weather API — skip watering when rain is predicted</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="future" value="Solar power supply for off-grid use"><div class="cb-box">✓</div><label>☀️ Solar power supply for off-grid outdoor use</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="future" value="ML-based watering schedule optimisation"><div class="cb-box">✓</div><label>🤖 ML-based schedule optimisation from historical data</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="future" value="Multi-zone support for multiple plants"><div class="cb-box">✓</div><label>🪴 Multi-zone support — manage multiple plants simultaneously</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="future" value="Nutrient and pH monitoring"><div class="cb-box">✓</div><label>🧪 Nutrient / pH monitoring — expanded soil sensing</label></div>
+            <div class="choice-item" onclick="toggleCheck(this)"><input type="checkbox" name="future" value="Push notifications for critical thresholds"><div class="cb-box">✓</div><label>🔔 Push notifications for critical moisture thresholds</label></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="flabel">How intuitive is the Blynk mobile interface for a non-technical user?</label>
+          <div class="scale-row">
+            <input type="radio" name="ux" id="ux1" value="1"><label for="ux1">1</label>
+            <input type="radio" name="ux" id="ux2" value="2"><label for="ux2">2</label>
+            <input type="radio" name="ux" id="ux3" value="3"><label for="ux3">3</label>
+            <input type="radio" name="ux" id="ux4" value="4"><label for="ux4">4</label>
+            <input type="radio" name="ux" id="ux5" value="5"><label for="ux5">5</label>
+            <input type="radio" name="ux" id="ux6" value="6"><label for="ux6">6</label>
+            <input type="radio" name="ux" id="ux7" value="7"><label for="ux7">7</label>
+            <input type="radio" name="ux" id="ux8" value="8"><label for="ux8">8</label>
+            <input type="radio" name="ux" id="ux9" value="9"><label for="ux9">9</label>
+            <input type="radio" name="ux" id="ux10" value="10"><label for="ux10">10</label>
+          </div>
+          <div class="scale-ends"><span>Very confusing</span><span>Extremely intuitive</span></div>
+        </div>
+
+        <div class="field">
+          <label class="flabel">Any other suggestions, ideas, or references for the team?</label>
+          <textarea style="min-height:130px;" placeholder="Free space — share anything: alternative platforms, related research papers, circuit improvements, deployment ideas, real-world use cases you'd want this to solve..."></textarea>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="form-block submit-block">
+        <p style="font-size:15px;color:var(--grey);margin-bottom:28px;max-width:400px;margin-left:auto;margin-right:auto;line-height:1.7;">
+          Thank you for taking the time to evaluate our project. The team at Army Institute of Technology will read every response.
+        </p>
+        <button type="submit" class="btn-submit">🌱 Submit Feedback</button>
+        <div class="submit-note" style="margin-top:14px;">* 5 required fields must be filled before submitting</div>
+      </div>
+
+    </form>
+
+    <div class="success-wrap" id="successWrap">
+      <div class="success-icon">🌿</div>
+      <h2>Thank You!</h2>
+      <p>Your feedback has been recorded. The team — Kamesh, Nitin &amp; Lakshya — will carefully review every response to improve the Smart IoT Plant Watering System.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══════════════════════════════════════════════ -->
+<footer style="background:var(--moss);padding:40px 24px;text-align:center;">
+  <p style="font-family:'DM Mono',monospace;font-size:12px;color:rgba(255,255,255,0.4);line-height:2;">
+    Kamesh Sahu (5123) · Nitin Rajput (5136) · Lakshya (5128)<br>
+    E&amp;TC-B · Army Institute of Technology · March 2026
+  </p>
+</footer>
+
+<script>
+// ── Star rating ───────────────────────────────────────────────
+const starLabels = ['','Poor','Fair','Good','Very Good','Excellent 🌟'];
+const starInputs = document.querySelectorAll('#starRow input');
+const starLabEls = document.querySelectorAll('#starRow label');
+
+starLabEls.forEach((lbl, i) => {
+  lbl.addEventListener('click', () => { starInputs[i].checked = true; updateStars(i+1); updateProgress(); });
+  lbl.addEventListener('mouseover', () => litStars(i+1));
+  lbl.addEventListener('mouseout', () => { const c = document.querySelector('input[name="stars"]:checked'); litStars(c ? +c.value : 0); });
+});
+function litStars(n) { starLabEls.forEach((s,i) => s.classList.toggle('lit', i < n)); }
+function updateStars(n) { litStars(n); document.getElementById('starTxt').textContent = starLabels[n] || 'Tap to rate'; }
+
+// ── Radio & Checkbox helpers ──────────────────────────────────
+function pickRadio(el, name, val) {
+  document.querySelectorAll(`[onclick*="'${name}'"]`).forEach(e => e.classList.remove('sel'));
+  document.querySelectorAll(`input[name="${name}"]`).forEach(r => r.checked = false);
+  el.classList.add('sel');
+  el.querySelector('input').checked = true;
+  updateProgress();
+}
+function toggleCheck(el) {
+  el.classList.toggle('sel');
+  el.querySelector('input').checked = el.classList.contains('sel');
+  updateProgress();
+}
+
+// ── Progress ──────────────────────────────────────────────────
+function updateProgress() {
+  let done = 0;
+  if (document.getElementById('inp-name')?.value.trim()) done++;
+  if (document.querySelector('input[name="role"]:checked')) done++;
+  if (document.querySelector('input[name="stars"]:checked')) done++;
+  if (document.querySelectorAll('#strengthGroup .sel').length > 0) done++;
+  if (document.getElementById('inp-weakness')?.value.trim().length > 5) done++;
+  // recommend counts too if done == 5 already but let's make it 5 key ones + optional
+  const total = 5;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('pFill').style.width = pct + '%';
+  document.getElementById('pLabel').textContent = `${done} of ${total} required fields complete`;
+}
+document.querySelectorAll('input,textarea,select').forEach(el => { el.addEventListener('input', updateProgress); el.addEventListener('change', updateProgress); });
+
+// ── Google Forms entry IDs ────────────────────────────────────
+const GF_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSfGLNAIjSoh3BuPk6iLdt5yUaURn7f1LSmmVchSu3ptmLQsDA/formResponse';
+const GF = {
+  role:         'entry.507073396',   // Your Role
+  stars:        'entry.1659009800',  // Overall Rating (1-5)
+  innovation:   'entry.432253435',   // Innovation Score (1-10)
+  hwRating:     'entry.430831299',   // Hardware Rating (Likert avg)
+  strengths:    'entry.831513257',   // Strengths (multi — repeated field)
+  uxScore:      'entry.583753496',   // Blynk UX Score (1-10)
+  impression:   'entry.1338609557',  // First Impression
+  strengthText: 'entry.1232577614',  // Most impressive thing (open text)
+  weakness:     'entry.1050730602',  // Biggest shortcoming (open text)
+  recommend:    'entry.754215597',   // Recommend for publication
+};
+
+// ── Form submit ───────────────────────────────────────────────
+document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  let ok = true;
+
+  // Name (stored locally only — Google Form doesn't have a name field)
+  const name = document.getElementById('inp-name');
+  if (!name.value.trim()) { showErr('err-name', name.closest('.field')); ok = false; }
+  else { hideErr('err-name', name.closest('.field')); }
+
+  // Role
+  if (!document.querySelector('input[name="role"]:checked')) { document.getElementById('err-role').style.display = 'block'; ok = false; }
+  else { document.getElementById('err-role').style.display = 'none'; }
+
+  // Stars
+  if (!document.querySelector('input[name="stars"]:checked')) { document.getElementById('err-stars').style.display = 'block'; ok = false; }
+  else { document.getElementById('err-stars').style.display = 'none'; }
+
+  // Strengths
+  if (document.querySelectorAll('#strengthGroup .sel').length === 0) { document.getElementById('err-strengths').style.display = 'block'; ok = false; }
+  else { document.getElementById('err-strengths').style.display = 'none'; }
+
+  // Weakness
+  const weak = document.getElementById('inp-weakness');
+  if (!weak.value.trim() || weak.value.trim().length < 6) { showErr('err-weakness', document.getElementById('f-weakness')); ok = false; }
+  else { hideErr('err-weakness', document.getElementById('f-weakness')); }
+
+  // Recommend
+  if (!document.querySelector('input[name="recommend"]:checked')) { document.getElementById('err-recommend').style.display = 'block'; ok = false; }
+  else { document.getElementById('err-recommend').style.display = 'none'; }
+
+  if (!ok) {
+    document.querySelector('.err-msg[style*="block"]')?.closest('.form-block')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // ── Collect all values ──────────────────────────────────────
+  const fd = new FormData();
+
+  // Role
+  const roleVal = document.querySelector('input[name="role"]:checked')?.value || '';
+  fd.append(GF.role, roleVal);
+
+  // Star rating
+  const starsVal = document.querySelector('input[name="stars"]:checked')?.value || '';
+  fd.append(GF.stars, starsVal);
+
+  // Innovation score
+  const innovVal = document.querySelector('input[name="innov"]:checked')?.value || '';
+  if (innovVal) fd.append(GF.innovation, innovVal);
+
+  // Hardware Likert — average the checked values
+  const hwFields = ['hw-esp','hw-sensor','hw-relay','hw-blynk'];
+  const hwVals = hwFields.map(n => document.querySelector(`input[name="${n}"]:checked`)?.value).filter(Boolean).map(Number);
+  if (hwVals.length) fd.append(GF.hwRating, Math.round(hwVals.reduce((a,b)=>a+b,0)/hwVals.length));
+
+  // Strengths (multi-select — append once per selected)
+  document.querySelectorAll('#strengthGroup .sel input').forEach(inp => {
+    fd.append(GF.strengths, inp.value);
+  });
+
+  // UX Score
+  const uxVal = document.querySelector('input[name="ux"]:checked')?.value || '';
+  if (uxVal) fd.append(GF.uxScore, uxVal);
+
+  // First impression
+  const impVal = document.querySelector('input[name="impression"]:checked')?.value || '';
+  if (impVal) fd.append(GF.impression, impVal);
+
+  // Most impressive (open text textarea — first one in strengths block)
+  const strengthTAs = document.querySelectorAll('.form-block textarea');
+  if (strengthTAs[0]?.value.trim()) fd.append(GF.strengthText, strengthTAs[0].value.trim());
+
+  // Biggest shortcoming
+  fd.append(GF.weakness, weak.value.trim());
+
+  // Recommendation
+  const recVal = document.querySelector('input[name="recommend"]:checked')?.value || '';
+  fd.append(GF.recommend, recVal);
+
+  // ── Silent POST to Google Forms via hidden iframe ───────────
+  // Create a hidden iframe to absorb Google's redirect response
+  let iframe = document.getElementById('gf-iframe');
+  if (!iframe) {
+    iframe = document.createElement('iframe');
+    iframe.id = 'gf-iframe';
+    iframe.name = 'gf-iframe';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+  }
+
+  // Create a temporary form and submit it into the iframe
+  const tempForm = document.createElement('form');
+  tempForm.method = 'POST';
+  tempForm.action = GF_ACTION;
+  tempForm.target = 'gf-iframe';
+  tempForm.style.display = 'none';
+
+  // Append all FormData entries as hidden inputs
+  for (const [key, val] of fd.entries()) {
+    const inp = document.createElement('input');
+    inp.type = 'hidden';
+    inp.name = key;
+    inp.value = val;
+    tempForm.appendChild(inp);
+  }
+
+  document.body.appendChild(tempForm);
+  tempForm.submit();
+  document.body.removeChild(tempForm);
+
+  // ── Show success UI ─────────────────────────────────────────
+  setTimeout(() => {
+    document.getElementById('pFill').style.width = '100%';
+    document.getElementById('pLabel').textContent = '5 of 5 complete — submitted!';
+    document.getElementById('feedbackForm').style.display = 'none';
+    const sw = document.getElementById('successWrap');
+    sw.style.display = 'block';
+    sw.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 400);
+});
+
+function showErr(id, field) { document.getElementById(id).style.display = 'block'; if(field) field.classList.add('has-err'); }
+function hideErr(id, field) { document.getElementById(id).style.display = 'none'; if(field) field.classList.remove('has-err'); }
+
+// ── Scroll reveal ─────────────────────────────────────────────
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); obs.unobserve(en.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
